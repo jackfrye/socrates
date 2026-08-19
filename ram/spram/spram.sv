@@ -12,7 +12,7 @@ module spram #(
   output logic [WIDTH-1:0]         drd
 );
 
-  logic [WIDTH-1:0] mem [DEPTH-1:0] = '0;
+  logic [WIDTH-1:0] mem [DEPTH-1:0];
   
   always @(posedge clk)
   begin
