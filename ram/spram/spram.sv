@@ -1,36 +1,31 @@
-module #(
+module spram #(
   parameter integer DEPTH = 1024,
   parameter integer WIDTH = 32
-) spram
+) 
 (
-  input                      clk ,
-  input                      rst ,
-  input                      wr  ,
-  input                      en  ,
-  input  [WIDTH-1:0]         dwr ,
-  input  [$clog2(DEPTH)-1:0] addr,
-  output [WIDTH-1:0]         drd
+  input                            clk ,
+  input                            rst ,
+  input                            wr  ,
+  input                            en  ,
+  input        [WIDTH-1:0]         dwr ,
+  input        [$clog2(DEPTH)-1:0] addr,
+  output logic [WIDTH-1:0]         drd
 );
 
-  logic [DEPTH-1:0][WIDTH-1:0] mem;
-  
-  always_comb
-  begin
-    if(en & ~wr)
-    begin
-      drd <= mem[addr];
-    end
-  end
+  logic [WIDTH-1:0] mem [DEPTH-1:0] = '0;
   
   always @(posedge clk)
   begin
-    if(rst)
+    if(en)
     begin
-      mem <= '0;
-    end
-    if(en & wr)
-    begin
-      mem[addr] <= dwr;
+      if(wr)
+      begin
+        mem[addr] <= dwr;
+      end
+      else
+      begin
+        drd <= mem[addr];
+      end
     end
   end
 
